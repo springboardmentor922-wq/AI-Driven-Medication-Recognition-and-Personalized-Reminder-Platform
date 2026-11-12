@@ -1,22 +1,24 @@
-﻿# ==========================================
-# PillSync - All-in-One Service Launcher
-# ==========================================
+﻿# PillSync - All-in-One Service Launcher
+$Root = $PSScriptRoot
 
-Write-Host "`n🚀 Starting PillSync Services (Backend + Frontend)...`n" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Starting PillSync Backend and Frontend services..." -ForegroundColor Cyan
+Write-Host ""
 
-# 1. Launch FastAPI Backend in a dedicated window
-Write-Host " [1/2] Launching FastAPI Backend on http://127.0.0.1:8000..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "`$host.UI.RawUI.WindowTitle = 'PillSync - Backend API'; Write-Host '⚡ FastAPI Backend Server Running on http://127.0.0.1:8000' -ForegroundColor Green; Write-Host '📖 Swagger Docs: http://127.0.0.1:8000/docs`n' -ForegroundColor Yellow; .\backend\venv\Scripts\python.exe backend\run.py"
+# 1. Start FastAPI Backend in a new window
+Write-Host " [1/2] Launching Backend on http://127.0.0.1:8000..." -ForegroundColor Green
+Start-Process powershell.exe -WorkingDirectory $Root -ArgumentList "-NoExit", "-Command", "& '.\backend\venv\Scripts\python.exe' 'backend\run.py'"
 
-# 2. Launch React Frontend in a dedicated window
-Write-Host " [2/2] Launching React Frontend on http://127.0.0.1:5173..." -ForegroundColor Magenta
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "`$host.UI.RawUI.WindowTitle = 'PillSync - React Frontend'; Write-Host '⚛️ React Frontend Running on http://127.0.0.1:5173`n' -ForegroundColor Magenta; Set-Location frontend; npm run dev"
+# 2. Start React Frontend in a new window
+Write-Host " [2/2] Launching Frontend on http://127.0.0.1:5173..." -ForegroundColor Magenta
+Start-Process powershell.exe -WorkingDirectory "$Root\frontend" -ArgumentList "-NoExit", "-Command", "npm run dev"
 
-# 3. Allow services 2 seconds to initialize, then launch the browser
+# 3. Wait 2 seconds and launch browser
 Start-Sleep -Seconds 2
 Start-Process "http://127.0.0.1:5173/"
 
-Write-Host "`n✅ All services started successfully!" -ForegroundColor Green
-Write-Host "   • Web App:     http://127.0.0.1:5173/" -ForegroundColor White
-Write-Host "   • API Docs:    http://127.0.0.1:8000/docs" -ForegroundColor White
-Write-Host "   • Healthcheck: http://127.0.0.1:8000/api/v1/health`n" -ForegroundColor White
+Write-Host ""
+Write-Host "All services started successfully!" -ForegroundColor Green
+Write-Host "  • Frontend Web App: http://127.0.0.1:5173/" -ForegroundColor White
+Write-Host "  • Backend Swagger:  http://127.0.0.1:8000/docs" -ForegroundColor White
+Write-Host ""
