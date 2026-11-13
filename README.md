@@ -51,7 +51,7 @@ Copy each example file to `.env` in the same folder. Never commit or share `.env
 
 ```env
 PORT=5000
-MONGO_URI=mongodb+srv://DB_USER:URL_ENCODED_PASSWORD@YOUR_CLUSTER.mongodb.net/pillsync?retryWrites=true&w=majority
+MONGO_URI=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 JWT_SECRET=use_a_long_random_secret_at_least_32_chars
 CLIENT_URL=http://localhost:5173
 OCR_URL=http://localhost:8000
