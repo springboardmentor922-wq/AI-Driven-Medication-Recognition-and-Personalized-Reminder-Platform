@@ -1,0 +1,53 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  ocr:
+    build: ./ocr-service
+    restart: unless-stopped
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_VISION_MODEL: ${GROQ_VISION_MODEL:-qwen/qwen3.8-27b}
+      TESSERACT_LANG: ${TESSERACT_LANG:-eng+deu}
+    ports:
+      - "8000:8000"
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    environment:
+      PORT: 5000
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/pillsync}
+      JWT_SECRET: ${JWT_SECRET:-change-this-before-use}
+      CLIENT_URL: http://localhost:5173
+      OCR_URL: http://ocr:8000
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Kolkata}
+      MISSED_DOSE_GRACE_MINUTES: ${MISSED_DOSE_GRACE_MINUTES:-10}
+    depends_on:
+      - mongo
+      - ocr
+    ports:
+      - "5000:5000"
+
+  client:
+    build: ./client
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - api
+    ports:
+      - "5173:5173"
+
+volumes:
+  mongo_data:

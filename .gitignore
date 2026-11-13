@@ -1,0 +1,19 @@
+# Environment secrets
+.env
+**/.env
+
+# Node dependencies
+node_modules/
+**/node_modules/
+
+# Python virtual environment
+.venv/
+**/.venv/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+
+# Build files
+dist/
+**/dist/
